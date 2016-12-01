@@ -18,7 +18,7 @@ labels = [] # Initialising labels as an empty array.
 home_dir = os.getenv("HOME")
 caffe_root = os.path.join(home_dir,'Documents', 'caffe')  # this file should be run from {caffe_root}/examples (otherwise change this line)
 sys.path.insert(0, os.path.join(caffe_root, 'python'))
-
+project_root =("/home/joao/djangoDAS/")
 import caffe
 
 if os.path.isfile(os.path.join(caffe_root, 'models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel')):
@@ -142,6 +142,38 @@ def index(request):
             'images_vector' : images_vector
         })
     return render(request, 'caffe_classification/index.html')
+
+def probability(request):
+        if request.method == 'POST' and request.FILES['myfile']:
+            myfile = request.FILES['myfile']
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            uploaded_file_url = fs.url(filename)
+            image = caffe.io.load_image(project_root + uploaded_file_url)
+            net.blobs['data'].data[...] = transformer.preprocess('data', image)
+
+            # perform classification
+            net.forward()
+
+            # obtain the output probabilities
+            output_prob = net.blobs['prob'].data[0]
+
+            # sort top five predictions from softmax output
+            top_inds = output_prob.argsort()[::-1][:5]
+
+            plt.imshow(image)
+            plt.axis('off')
+
+            print 'probabilities and labels:'
+            predictions = zip(output_prob[top_inds], labels[top_inds])
+            prediction = format(predictions)
+            # predictions = predict_imageNet(project_root + uploaded_file_url)
+            # predictions = format(predictions)
+            return render(request , 'caffe_classification/show_probability.html', {
+                'uploaded_file_url': uploaded_file_url,
+                'predictions': predictions
+            })
+        return render(request, 'caffe_classification/probability.html')
 
 def create_images_vector(uploaded_file_url):
     vectors, img_files = load_dataset(images_path)

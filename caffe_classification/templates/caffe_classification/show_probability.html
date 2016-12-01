@@ -1,0 +1,31 @@
+{% extends "caffe_classification/base.html" %}
+{% block content %}
+
+{% if uploaded_file_url %}
+<div class="container">
+     <br>
+     <br>
+     <br>
+      <div class="row">
+        <div class="center">
+          <div class="card">
+            <div class="card-image">
+              <img src="{{uploaded_file_url}}" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="collection with-header">
+        <li class="collection-header">
+          <h4>Probabilidades:</h4></li>
+          {% for p in predictions %}
+              <li class="collection-item">{{p}}</li>
+          {% endfor %}
+      </ul>
+
+    </div>
+
+{% endif %}
+
+{% endblock %}

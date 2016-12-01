@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^face_detection/detect/$', views.detect, name='detect'),
     url(r'^admin/', admin.site.urls),
     url(r'^index/', views1.index, name='index'),
+    url(r'^probability/', views1.probability, name='probability'),
 ]
 
 if settings.DEBUG:
