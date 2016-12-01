@@ -16,8 +16,16 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from face_detector import views
+from django.conf import settings
+from django.conf.urls.static import static
+from caffe_classification import views as views1
 
 urlpatterns = [
     url(r'^face_detection/detect/$', views.detect, name='detect'),
     url(r'^admin/', admin.site.urls),
+    url(r'^index/', views1.index, name='index'),
+    url(r'^probability/', views1.probability, name='probability'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
