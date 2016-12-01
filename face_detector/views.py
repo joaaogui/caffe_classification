@@ -20,23 +20,11 @@ def detect(request):
 	# check to see if this is a post request
 	if request.method == "POST":
 		# check to see if an image was uploaded
-		if request.FILES.get("image", None) is not None:
-			# grab the uploaded image
-			image = _grab_image(stream=request.FILES["image"])
-
-		# otherwise, assume that a URL was passed in
-		else:
-			# grab the URL from the request
-			url = request.POST.get("url", None)
-
-			# if the URL is None, then return an error
-			if url is None:
-				data["error"] = "No URL provided."
-				return JsonResponse(data)
-
-			# load the image and convert
-			image = _grab_image(url=url)
-
+		myfile = request.FILES['myfile']
+		fs = FileSystemStorage()
+		filename = fs.save(myfile.name, myfile)
+		uploaded_file_url = fs.url(filename)
+		image = _grab_image(project_root + uploaded_file_url)
 		# convert the image to grayscale, load the face cascade detector,
 		# and detect faces in the image
 		image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -50,8 +38,15 @@ def detect(request):
 		# update the data dictionary with the faces detected
 		data.update({"num_faces": len(rects), "faces": rects, "success": True})
 
+		return render(request , 'face_detector/index.html', {
+			'response': data
+		})
+
 	# return a JSON response
-	return JsonResponse(data)
+	return render(request, 'face_detector/detect.html', {
+		'response': data
+	})
+
 
 def _grab_image(path=None, stream=None, url=None):
 	# if the path is not None, then load the image from disk
