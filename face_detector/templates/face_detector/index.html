@@ -1,0 +1,23 @@
+
+
+{% extends "caffe_classification/base.html" %}
+{% block content %}
+<div class="container">
+     <br>
+     <br>
+     <br>
+      <div class="row">
+        <div class="center">
+          <div class="card">
+            <div class="card-image">
+<body>
+ {% for key,value in response.items %}<li class="collection-item"><b>{{key}}</b></li><li class="collection-item">{{value}}</li>{% endfor %}
+</body>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+{% endblock %}

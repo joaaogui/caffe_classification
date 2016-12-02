@@ -181,10 +181,6 @@ def create_images_vector(uploaded_file_url):
 
     # Freeing memory:
     del vectors
-
-
-
-    #remove a first element of uploaded_file_url string
     uploaded_file_url = list(uploaded_file_url)
     uploaded_file_url.pop(0)
     uploaded_file_url = "".join(uploaded_file_url)

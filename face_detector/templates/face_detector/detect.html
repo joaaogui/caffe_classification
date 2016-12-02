@@ -1,8 +1,30 @@
 {% extends "caffe_classification/base.html" %}
-{% block content %}
 
-{% for c in response %}
-<li class="collection-item">{{c}}</li>
-{% endfor %}
+{% block content %}
+  <div class="container">
+    <header class="jumbotron hero-spacer">
+        <ul>
+          <h1><b>Face Detector</b></h1>
+          <h2><b>Selecione uma imagem e clique em "Upload"</b></h2>
+
+        </ul>
+        <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h4><br><ul>
+        <input type="file" name="myfile"><br>
+        <button type="submit">Upload</button>
+      </ul>
+      </h4>
+      </form>
+
+      {% if uploaded_file_url %}
+        <img src="{{uploaded_file_url}}" width="{{200}}" height="{{200}}"/>
+      {% endif %}
+
+    </div>
+
+
+    </header>
+  <hr>
 
 {% endblock %}

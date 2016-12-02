@@ -20,11 +20,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from caffe_classification import views as views1
 
+from django.views.generic import TemplateView
+
 urlpatterns = [
     url(r'^face_detector/detect/$', views.detect, name='detect'),
     url(r'^admin/', admin.site.urls),
     url(r'^index/', views1.index, name='index'),
     url(r'^probability/', views1.probability, name='probability'),
+    url(r'^$', TemplateView.as_view(template_name="caffe_classification/welcome.html")),
 ]
 
 if settings.DEBUG:

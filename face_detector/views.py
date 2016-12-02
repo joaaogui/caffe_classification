@@ -7,15 +7,17 @@ import urllib
 import json
 import cv2
 import os
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
 # define the path to the face detector
 FACE_DETECTOR_PATH = "{base_path}/cascades/haarcascade_frontalface_default.xml".format(
 	base_path=os.path.abspath(os.path.dirname(__file__)))
-
+project_root =("/home/joao/djangoDAS/")
 @csrf_exempt
 def detect(request):
 	# initialize the data dictionary to be returned by the request
-	data = {"success": False}
+	data = {}
 
 	# check to see if this is a post request
 	if request.method == "POST":
@@ -36,7 +38,10 @@ def detect(request):
 		rects = [(int(x), int(y), int(x + w), int(y + h)) for (x, y, w, h) in rects]
 
 		# update the data dictionary with the faces detected
-		data.update({"num_faces": len(rects), "faces": rects, "success": True})
+		data.update({"Numero De Rostos": len(rects), "Posicao Dos Rostos": rects})
+
+		print "******"
+		print data
 
 		return render(request , 'face_detector/index.html', {
 			'response': data
